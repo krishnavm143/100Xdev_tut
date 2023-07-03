@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Todo App</h1>
+    <form id="todoform" method="post">
+        <label for="title">title</label>
+        <input type="text" name="title" id="title">
+        <label for="description">description</label>
+        <input type="text" name="description" id="description">
+        <button type="submit">Click</button>
+    </form>
+
+    <ul class="todolist"></ul>
+    <script>
+        function deletebtn(id) {
+            console.log('delete clcke', id)
+            fetch(`http://localhost:4000/todos/${id}`, {
+                method: "DELETE",
+                //body: JSON.stringify({ id: this.id }),
+                //     headers: {
+                //       'Content-Type': 'application/json'
+                // }
+            })
+                .then((res) => res.json()).then((data) => {
+                    console.log(data)
+                    getAlltodo()
+                })
+        }
+        function getAlltodo() {
+            fetch('http:localhost:4000/todos', {
+                method: "GET"
+            }).then(res => res.json()).then(data => {
+                const todoListDiv = document.querySelector('.todolist')
+                todoListDiv.innerHTML = ''
+
+                data.forEach(el => {
+                    const newTodo = document.createElement('li')
+                    newTodo.innerHTML = `<p>id:${el.id} <b>title</b>: ${el.title} <b>description</b>: ${el.description}</p> <button onclick='deletebtn(${el.id})'>delete</button>`
+
+                    todoListDiv.appendChild(newTodo)
+                })
+            }).catch(err => console.log(err))
+        }
+        getAlltodo()
+
+
+        function onPress(e) {
+            e.preventDefault()
+            const titleInput = document.getElementById('title').value;
+            const descriptionInput = document.getElementById('description').value;
+
+            fetch('http://localhost:4000/todos',
+                {
+                    method: "POST",
+                    body: JSON.stringify({
+                        title: titleInput,
+                        description: descriptionInput
+                    }), headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            ).then((res) => res.json()).then((data) => {
+                console.log(data)
+                getAlltodo()
+            })
+        }
+
+        const form = document.getElementById('todoform')
+        form.addEventListener('submit', onPress)
+    </script>
+</body>
+
+</html>

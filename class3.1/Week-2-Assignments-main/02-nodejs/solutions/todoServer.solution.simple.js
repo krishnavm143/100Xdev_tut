@@ -20,7 +20,7 @@ function removeAtIndex(arr, index) {
     if (i !== index) newArray.push(arr[i]);
   }
   return newArray;
-} 
+}
 
 app.get('/todos', (req, res) => {
   res.json(todos);

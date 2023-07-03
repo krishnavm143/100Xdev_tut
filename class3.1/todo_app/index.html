@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Todo App</h1>
+
+    Todo Title
+    <input type="text" class="title">
+    <br><br>
+    Todo description
+    <input type="text" class="description">
+    <button onclick='onPress()'>Click</button>
+
+    <script>
+        function parsedResponse(data) {
+            console.log(data)
+        }
+        function callback(res) {
+            res.json().then(parsedResponse)
+        }
+        function onPress() {
+            fetch(`http://localhost:4000/todos`, {
+                method: "get",
+            }).then(callback)
+            // Add your logic here
+            console.log('clicked')
+        }
+
+    </script>
+</body>
+
+</html>
