@@ -11,13 +11,14 @@
     <h1>Todo App</h1>
     <form id="todoform" method="post">
         <label for="title">title</label>
-        <input type="text" name="title" id="title">
+        <input type="text" name="title" id="title"><br>
         <label for="description">description</label>
         <input type="text" name="description" id="description">
         <button type="submit">Click</button>
     </form>
 
     <ul class="todolist"></ul>
+    <div style="color: red;" class="error"></div>
     <script>
         function deletebtn(id) {
             console.log('delete clcke', id)
@@ -55,6 +56,12 @@
             e.preventDefault()
             const titleInput = document.getElementById('title').value;
             const descriptionInput = document.getElementById('description').value;
+            document.querySelector('.error').innerHTML = ""
+
+            if (titleInput === "" || descriptionInput === "") {
+                document.querySelector('.error').innerHTML = "Dont keep the values empty"
+                return
+            }
 
             fetch('http://localhost:4000/todos',
                 {
@@ -69,6 +76,8 @@
             ).then((res) => res.json()).then((data) => {
                 console.log(data)
                 getAlltodo()
+                document.getElementById('title').value = ''
+                document.getElementById('description').value = ''
             })
         }
 
